@@ -1038,6 +1038,13 @@ body {
     letter-spacing: 0.05em;
   }
 
+  /* כותרת בתצוגת long press – באותו גודל כמו בעמודי העבודות (work-page-hover-title) */
+  .site-title-text-mobile.title-work-preview {
+    font-size: 2.1rem;
+    line-height: 1.1;
+    min-height: 0;
+  }
+
   /* במובייל בלבד: כש-ABOUT פתוח – הכותרת מתחבאת והפסקה מופיעה באותו מקום */
   body.about-open-mobile .site-title-wrap {
     visibility: hidden;
@@ -1122,7 +1129,7 @@ body {
   }
 
   .about-paragraph-text {
-    font-size: 0.875rem; /* כמו הפסקאות הרצות בעמודי העבודה, ללא הקטנה נוספת במובייל */
+    font-size: calc(0.875rem - 1px); /* מוקטן ב-1px במובייל */
   }
 
   .contact-paragraph-text {
@@ -1272,6 +1279,28 @@ body {
     display: flex;
     flex-direction: column;
   }
+
+  /* South Film Festival – במובייל בלבד: סדר תצוגה כך ש־2.jpg יופיע מיד אחרי 1.gif */
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(1) { order: 1; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(10) { order: 2; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(2) { order: 3; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(3) { order: 4; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(4) { order: 5; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(5) { order: 6; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(6) { order: 8; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(7) { order: 7; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(8) { order: 9; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(9) { order: 10; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(11) { order: 11; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(12) { order: 12; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(13) { order: 13; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(14) { order: 14; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(15) { order: 15; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(16) { order: 16; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(17) { order: 17; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(18) { order: 18; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(19) { order: 19; }
+  .work-page .work-page-gallery-2col .work-page-gallery-rest .south-gallery-item:nth-child(20) { order: 20; }
 
   /* כותרות בעמודי עבודות – גלויות, יישור שמאל כמו פסקת הטקסט (12px); גוש הטקסט העליון כקבוצה 10px למעלה */
   .work-page .work-page-hover-title {
