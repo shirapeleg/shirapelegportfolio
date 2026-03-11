@@ -6,6 +6,12 @@
   padding: 0;
 }
 
+/* עובי קו המסגרת – משמש גם לקווי ההפרדה בעמודי עבודה (למשל street) */
+:root {
+  --frame-line-width: 1px;
+  --work-page-separator-gap: var(--frame-line-width);
+}
+
 @font-face {
   font-family: 'PP Neue Montreal Mono';
   src: url('fonts/PPNeueMontrealMono-Book.otf') format('opentype');
@@ -76,7 +82,7 @@ body {
   height: calc(100% - 10px);
   margin: 5px;
   overflow: hidden;
-  border: 1px solid black;
+  border: var(--frame-line-width) solid black;
   position: relative;
 }
 
@@ -286,7 +292,7 @@ body {
 .work-page-gallery {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -334,10 +340,10 @@ body {
   object-position: top center;
 }
 
-/* Rest: CSS columns – 2 columns, full-size images, 1px gap like other work pages */
+/* Rest: CSS columns – 2 columns, full-size images, gap כמו בשאר עמודי העבודה */
 .work-page-gallery-rest {
   column-count: 2;
-  column-gap: 1px;
+  column-gap: var(--work-page-separator-gap);
   width: 100%;
 }
 
@@ -449,16 +455,16 @@ body {
 .street-gallery {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
-  background: #000;
+  background: #fff;
 }
 
 .street-row {
   display: flex;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   flex: 1;
   min-height: 0;
 }
@@ -484,7 +490,7 @@ body {
 .canaanism-gallery {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
@@ -493,7 +499,7 @@ body {
 
 .canaanism-row {
   display: flex;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   flex: 1;
   min-height: 0;
 }
@@ -520,7 +526,7 @@ body {
 .lissitzky-gallery {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
@@ -529,7 +535,7 @@ body {
 
 .lissitzky-row {
   display: flex;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   flex: 1;
   min-height: 0;
 }
@@ -555,7 +561,7 @@ body {
 .daily-gallery {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
@@ -564,7 +570,7 @@ body {
 
 .daily-row {
   display: flex;
-  gap: 1px;
+  gap: var(--work-page-separator-gap);
   min-height: 0;
 }
 
@@ -1268,9 +1274,21 @@ body {
   .work-page .work-page-gallery video:first-child {
     clip-path: none;
     margin-top: 0;
+    /* Safari מובייל: min-height מונע גובה 0 לפני טעינת הווידאו; גובה אמיתי לפי הווידאו (כמו תמונות) */
     min-height: 200px;
-    /* בלי aspect-ratio – הווידאו נמדד לפי הרוחב והגובה הפנימי (כמו תמונות) וממלא את הרוחב */
-    aspect-ratio: auto;
+    height: auto;
+  }
+
+  /* עמוד Block – במובייל בלבד: התמונה השנייה תופיע בשלמותה (בלי חיתוך) */
+  .work-page .work-page-gallery-block img:nth-child(2) {
+    clip-path: none;
+    margin-top: 0;
+  }
+
+  /* עמוד Wildflowers – במובייל: חיתוך קטן יותר מהחלק העליון של התמונה השנייה (60px במקום 90px) */
+  .work-page .work-page-gallery img:nth-child(2) {
+    clip-path: inset(60px 0 0 0);
+    margin-top: -60px;
   }
 
   /* גלריה South – במובייל: flex בעמודה אחת כדי שסדר התמונות יהיה תמיד לפי DOM גם בטלפון אמיתי (column-count עלול ליצור סדר שונה בחלק מהדפדפנים) */
