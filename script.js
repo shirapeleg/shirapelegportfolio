@@ -649,8 +649,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
     var isReload = navEntry && navEntry.type === 'reload';
     var fromOutside = !document.referrer || document.referrer.indexOf(window.location.origin) !== 0;
-    var showIntro = isReload || fromOutside;
-    if (!introRan && isHome && showIntro) {
+    var showIntro = isHome && !introRan;
+    if (showIntro) {
       introRan = true;
       if (isMobile) {
         setTimeout(runOpeningOverlayIntro, 80);
