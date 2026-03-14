@@ -34,16 +34,7 @@
   </div>
   <main>
     <div class="work-page-gallery work-page-gallery-wildflowers">
-      <video
-        src="WILDFLOWERS%20PROTECTION%20LAW/13.mp4"
-        title="Wildflowers Protection Law – 1"
-        muted
-        autoplay
-        loop
-        playsinline
-        webkit-playsinline
-        preload="auto"
-        poster="WILDFLOWERS%20PROTECTION%20LAW/2.png"></video>
+      <video src="WILDFLOWERS%20PROTECTION%20LAW/13.mp4" loop muted playsinline autoplay preload="auto"></video>
       <img src="WILDFLOWERS%20PROTECTION%20LAW/2.png" alt="Wildflowers Protection Law – 2" fetchpriority="high" />
       <img src="WILDFLOWERS%20PROTECTION%20LAW/3.png" alt="Wildflowers Protection Law – 3" fetchpriority="high" />
       <img src="WILDFLOWERS%20PROTECTION%20LAW/4.png" alt="Wildflowers Protection Law – 4" />
@@ -61,20 +52,5 @@
     </svg>
   </a>
   <script src="scroll-to-top.js"></script>
-  <script>
-    (function() {
-      if (!window.matchMedia || !window.matchMedia('(max-width: 768px)').matches) return;
-      var video = document.querySelector('.work-page-gallery-wildflowers video');
-      if (!video) return;
-      function startOnInteraction() {
-        video.removeAttribute('poster');
-        if (video.paused) video.play().catch(function() {});
-        document.removeEventListener('touchstart', startOnInteraction, { passive: true });
-        document.removeEventListener('scroll', startOnInteraction, { passive: true });
-      }
-      document.addEventListener('touchstart', startOnInteraction, { passive: true });
-      document.addEventListener('scroll', startOnInteraction, { passive: true });
-    })();
-  </script>
 </body>
 </html>
