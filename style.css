@@ -912,8 +912,8 @@ body {
 
 /* Desktop-first: base styles target desktop; use max-width media queries to adapt down */
 
-/* ===== Mobile layout (עד 768px) ===== */
-@media (max-width: 768px) {
+/* ===== Mobile layout (עד ~1100px) ===== */
+@media (max-width: 1100px) {
 
   /* מסגרת המסך – גודל קבוע, גלילה רק בתוך המסגרת (כמו בדסקטופ), מחוץ למסגרת תמיד לבן.
      שימוש ב-100svh (small viewport height) כדי שהמסגרת והניווט התחתון יתקצרו ולא יישאר רווח מתחת לשורת PREV/NEXT כשסרגל הכתובת גלוי. */
