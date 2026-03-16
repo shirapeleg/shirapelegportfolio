@@ -19,50 +19,10 @@
   font-style: normal;
 }
 
-/* Fonts from shira peleg/new fonts – used for title rotation */
-@font-face {
-  font-family: 'Acte';
-  src: url('shira peleg/new fonts/Acte.otf') format('opentype');
-}
-@font-face {
-  font-family: 'DingDongIrregular';
-  src: url('shira peleg/new fonts/DingDongIrregular.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Ductus';
-  src: url('shira peleg/new fonts/Ductus.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Feroniapi';
-  src: url('shira peleg/new fonts/Feroniapi-MediumItalic.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Marion';
-  src: url('shira peleg/new fonts/Marion.otf') format('opentype');
-}
+/* OTMiniature – כותרת האתר (Shira Peleg ועבודות) */
 @font-face {
   font-family: 'OTMiniature';
   src: url('shira peleg/new fonts/OTMiniature-Bold.otf') format('opentype');
-}
-@font-face {
-  font-family: 'SuperNotoriousDot';
-  src: url('shira peleg/new fonts/SuperNotoriousDot.otf') format('opentype');
-}
-@font-face {
-  font-family: 'TypefesseClaireObscure';
-  src: url('shira peleg/new fonts/Typefesse_Claire-Obscure.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Velvelyne';
-  src: url('shira peleg/new fonts/Velvelyne-Book.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Infini';
-  src: url('shira peleg/new fonts/infini.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Revival';
-  src: url('shira peleg/new fonts/revival.otf') format('opentype');
 }
 @font-face {
   font-family: 'Heebo';
@@ -340,6 +300,28 @@ body {
   object-position: top center;
 }
 
+/* Wildflowers: last row – 2 images filling the grid */
+.work-page-gallery-wildflowers-last-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--work-page-separator-gap);
+  width: 100%;
+  min-height: min-content; /* דסקטופ: מונע כיווץ כשהגלריה height:100% */
+  align-items: end;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.work-page-gallery-wildflowers-last-row img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  display: block;
+  object-fit: contain;
+  object-position: bottom center;
+  vertical-align: bottom;
+}
+
 /* Rest: CSS columns – 2 columns, full-size images, gap כמו בשאר עמודי העבודה */
 .work-page-gallery-rest {
   column-count: 2;
@@ -431,6 +413,12 @@ body {
 .work-page-gallery img:nth-child(2) {
   clip-path: inset(90px 0 0 0);
   margin-top: -90px;
+}
+
+/* Wildflowers: תמונות בשורה האחרונה (20, 23, 21) – בלי חיתוך בדסקטופ */
+.work-page-gallery-wildflowers .work-page-gallery-wildflowers-last-row img {
+  clip-path: none;
+  margin-top: 0;
 }
 
 /* Princess page: do not clip image 2 */
@@ -1093,6 +1081,14 @@ body {
     opacity: 1;
   }
 
+  /* מובייל בלבד: הסתרה מלאה של התמונות – לא מופיעות כלל */
+  .bottom-rectangle-grid .grid-cell .grid-cell-img {
+    display: none;
+  }
+  .about-intro-overlay .about-intro-overlay-cell-img {
+    display: none;
+  }
+
   /* כש-CONTACT פתוח במובייל – רק הכותרת מוסתרת, טקסט המייל/מספר מופיע במקומה, שום דבר לא זז */
   body.contact-open-mobile .site-title-wrap {
     visibility: hidden;
@@ -1259,6 +1255,16 @@ body {
   /* גלריה בעמודי עבודות – במובייל גובה לפי תוכן (לא 100%) כדי שהפריטים יוצגו */
   .work-page .work-page-gallery {
     height: auto;
+    min-height: 0;
+  }
+
+  /* גלריית Canaanism במובייל – גובה לפי תוכן כדי שכל השורות (כולל 9, 11, 12, 13) יוצגו */
+  .work-page .canaanism-gallery {
+    height: auto;
+    min-height: 0;
+  }
+  .work-page .canaanism-row {
+    flex: none;
     min-height: 0;
   }
 
