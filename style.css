@@ -1287,9 +1287,7 @@ body {
 
   /* Safari מובייל: כפיית שכבת רינדור נפרדת לווידאו כדי שהפריימים יוצגו */
   .work-page .work-page-gallery-wildflowers video:first-child {
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    display: none !important; /* במובייל: לא מציגים את הוידאו הראשון בכלל */
   }
 
   /* עמוד Wildflowers – במובייל: אין חפיפה בין הווידאו הראשון לתמונה השנייה, כדי למנוע מצב שבו וידאו מנגן "מאחור" אבל נראית רק תמונה סטטית */
