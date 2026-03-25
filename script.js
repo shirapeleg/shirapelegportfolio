@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (aboutText) aboutText.hidden = !aboutVisible;
     if (contactText) contactText.hidden = !contactVisible;
     /* מובייל בלבד: ABOUT פתוח = מחליפים כותרת בפסקה; CONTACT פתוח = מסתירים כותרת */
-    var mqMobile = window.matchMedia && window.matchMedia('(max-width: 768px)');
+    var mqMobile = window.matchMedia && window.matchMedia('(max-width: 1100px)');
     if (mqMobile && mqMobile.matches) {
       document.body.classList.toggle('about-open-mobile', !!aboutVisible);
       document.body.classList.toggle('contact-open-mobile', !!contactVisible);
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function positionMobileTitle() {
     if (!titleWrap) return;
-    const mq = window.matchMedia && window.matchMedia('(max-width: 768px)');
+    const mq = window.matchMedia && window.matchMedia('(max-width: 1100px)');
     if (!mq || !mq.matches) {
       /* דסקטופ – רק משחזרים מיקום כותרת, לא נוגעים ב-aboutWrap */
       titleWrap.style.top = '45px';
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', positionMobileTitle);
 
   /* דסקטופ: hover על עבודה מחליף כותרת. מובייל: החלפת כותרת רק ב-long press */
-  const isMobileForTitle = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  const isMobileForTitle = window.matchMedia && window.matchMedia('(max-width: 1100px)').matches;
   var longPressTimer = null;
   var longPressTriggered = false;
   var preventClickAfterLongPress = false;
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const gridEl = document.getElementById('bottom-grid');
   if (!gridEl) return;
 
-  const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 1100px)').matches;
 
   let introRan = false;
 
@@ -429,6 +429,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function runAboutIntroOverlay() {
     var overlay = document.getElementById('about-intro-overlay');
     if (!overlay) return;
+    // If CSS hides the overlay tiles, don't build the heavy grid (saves DOM/network).
+    if (typeof aboutIntroTilesAreHidden === 'function' && aboutIntroTilesAreHidden()) return;
     var width = window.innerWidth || document.documentElement.clientWidth;
     var height = window.innerHeight || document.documentElement.clientHeight;
     var cols = Math.max(8, Math.floor(width / 70));
@@ -482,6 +484,27 @@ document.addEventListener('DOMContentLoaded', function () {
   const HOVER_IMAGE_EXT = 'png';
   const HOVER_BASE = 'hover/';
 
+  function aboutIntroTilesAreHidden() {
+    // Measure against CSS by creating a temporary element off-screen.
+    if (!window.getComputedStyle) return false;
+    var temp = document.createElement('div');
+    temp.className = 'about-intro-overlay-cell-img';
+    temp.style.position = 'absolute';
+    temp.style.left = '-99999px';
+    temp.style.top = '-99999px';
+    temp.style.width = '1px';
+    temp.style.height = '1px';
+    // Ensure the selector `.about-intro-overlay .about-intro-overlay-cell-img` matches.
+    var wrapper = document.createElement('div');
+    // Use `is-active` so the parent isn't `display:none` (keeps the measurement accurate).
+    wrapper.className = 'about-intro-overlay is-active';
+    wrapper.appendChild(temp);
+    document.body.appendChild(wrapper);
+    var hidden = window.getComputedStyle(temp).display === 'none';
+    wrapper.remove();
+    return hidden;
+  }
+
   /** מחזיר את עמוד העבודה לפי מספר תמונה (1–69) */
   function getPageForImageNum(num) {
     if (num >= 1 && num <= 8) return 'block';
@@ -500,6 +523,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function runOpeningOverlayIntro() {
     var overlay = document.getElementById('about-intro-overlay');
     if (!overlay) return;
+    // If CSS hides the overlay tiles, don't build the heavy grid (saves DOM/network).
+    if (typeof aboutIntroTilesAreHidden === 'function' && aboutIntroTilesAreHidden()) return;
     var width = window.innerWidth || document.documentElement.clientWidth;
     var height = window.innerHeight || document.documentElement.clientHeight;
     var cols = Math.max(8, Math.floor(width / 70));
@@ -595,29 +620,36 @@ document.addEventListener('DOMContentLoaded', function () {
       '" fill="none" stroke="black" stroke-width="1"/>' +
       '</svg>';
 
-    /* שכבת תאים ל-hover: כל תא מציג תמונה לפי סדר המספרים (התחלה אקראית) */
-    const startIndex = 1 + Math.floor(Math.random() * HOVER_IMAGE_COUNT);
-    const cellsContainer = document.createElement('div');
-    cellsContainer.className = 'grid-cells';
-    cellsContainer.setAttribute('aria-hidden', 'true');
-    let cellIndex = 0;
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const imageNum = ((startIndex - 1 + cellIndex) % HOVER_IMAGE_COUNT) + 1;
-        const cell = document.createElement('div');
-        cell.className = 'grid-cell';
-        cell.dataset.imageNum = String(imageNum);
-        cell.style.left = (c * cellWidth) + 'px';
-        cell.style.top = (r * cellHeight) + 'px';
-        cell.style.width = cellWidth + 'px';
-        cell.style.height = cellHeight + 'px';
-        const bg = document.createElement('div');
-        bg.className = 'grid-cell-img';
-        bg.style.backgroundImage = (aboutVisible && !preferHoverGrid)
-          ? "url('me.png')"
-          : "url('" + HOVER_BASE + imageNum + '.' + HOVER_IMAGE_EXT + "')";
-        cell.appendChild(bg);
-        if (!isMobile) {
+    /*
+     * שכבת תאים ל-hover: כבדה מאוד (הרבה תאים + backgroundImages).
+     * ב־CSS במובייל (עד ~1100px) התמונות מוסתרות, ובפועל אין hover שמפעיל החלפת כותרת.
+     * לכן בדילוג על בניית התאים אנחנו חוסכים עבודה/בקשות בלי לשנות מראה או אינטראקציה.
+     */
+    if (!isMobile) {
+      const startIndex = 1 + Math.floor(Math.random() * HOVER_IMAGE_COUNT);
+      const cellsContainer = document.createElement('div');
+      cellsContainer.className = 'grid-cells';
+      cellsContainer.setAttribute('aria-hidden', 'true');
+      let cellIndex = 0;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const imageNum = ((startIndex - 1 + cellIndex) % HOVER_IMAGE_COUNT) + 1;
+          const cell = document.createElement('div');
+          cell.className = 'grid-cell';
+          cell.dataset.imageNum = String(imageNum);
+          cell.style.left = (c * cellWidth) + 'px';
+          cell.style.top = (r * cellHeight) + 'px';
+          cell.style.width = cellWidth + 'px';
+          cell.style.height = cellHeight + 'px';
+
+          const bg = document.createElement('div');
+          bg.className = 'grid-cell-img';
+          bg.style.backgroundImage = (aboutVisible && !preferHoverGrid)
+            ? "url('me.png')"
+            : "url('" + HOVER_BASE + imageNum + '.' + HOVER_IMAGE_EXT + "')";
+          cell.appendChild(bg);
+
           (function (cellEl, imgEl) {
             var hideTimeout = null;
             cellEl.addEventListener('mouseenter', function () {
@@ -631,18 +663,21 @@ document.addEventListener('DOMContentLoaded', function () {
               }, 500);
             });
           })(cell, bg);
+
           cell.addEventListener('click', function () {
             var num = parseInt(cell.dataset.imageNum, 10);
             if (aboutVisible && !preferHoverGrid) return;
             var page = getPageForImageNum(num);
             if (page) window.location.href = page + '.html';
           });
+
+          cellsContainer.appendChild(cell);
+          cellIndex++;
         }
-        cellsContainer.appendChild(cell);
-        cellIndex++;
       }
+
+      gridEl.appendChild(cellsContainer);
     }
-    gridEl.appendChild(cellsContainer);
 
     var isHome = !window.location.pathname || window.location.pathname === '/' ||
       window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
